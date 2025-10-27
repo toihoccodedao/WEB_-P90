@@ -15,16 +15,20 @@ app = Flask(__name__)
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
 
+# Đường dẫn file credentials.json (đặt cùng thư mục với app.py)
+credentials = ServiceAccountCredentials.from_json_keyfile_name(
+    'credentials.json', scope)
+
 # Lấy JSON credentials từ biến môi trường GOOGLE_CREDS
-creds_json = os.environ.get("GOOGLE_CREDS")
+# creds_json = os.environ.get("GOOGLE_CREDS")
 
-if creds_json:
-    creds_dict = json.loads(creds_json)
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-else:
-    raise Exception("⚠️ Environment variable GOOGLE_CREDS is missing!")
+# if creds_json:
+#     creds_dict = json.loads(creds_json)
+#     credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+# else:
+#     raise Exception("⚠️ Environment variable GOOGLE_CREDS is missing!")
 
-client = gspread.authorize(credentials)
+# client = gspread.authorize(credentials)
 
 # ID của Google Sheet
 SPREADSHEET_ID = '14AWEbPdGMZElO-VBzW9N9MTlf0kZxtBNeBIbkxQsxQo'
