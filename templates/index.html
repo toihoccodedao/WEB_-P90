@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Thông Tin Người Lao Động</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>PHIẾU THÔNG TIN NGƯỜI LAO ĐỘNG</h1>
+        <p class="subtitle">Vui lòng điền đầy đủ thông tin vào các trường bên dưới</p>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <form id="laborForm">
+            <div class="form-group">
+                <label for="fullName" class="required">1. Họ, chữ đệm và tên khai sinh</label>
+                <div class="input-icon">
+                    <input type="text" id="fullName" name="fullName" required placeholder="Nhập họ và tên đầy đủ">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="birthDate" class="required">2. Ngày, tháng, năm sinh</label>
+                <input type="date" id="birthDate" name="birthDate" required>
+            </div>
+
+            <div class="form-group">
+                <label class="required">3. Giới tính</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="male" name="gender" value="Nam" required>
+                        <label for="male">Nam</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="female" name="gender" value="Nữ" required>
+                        <label for="female">Nữ</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="idNumber" class="required">4. Số định danh cá nhân/CCCD/Căn cước</label>
+                <input type="text" id="idNumber" name="idNumber" required placeholder="Nhập số CCCD/Căn cước">
+            </div>
+
+            <div class="form-group">
+                <label for="bhxh">5. Mã số BHXH</label>
+                <input type="text" id="bhxh" name="bhxh" placeholder="Nhập mã số bảo hiểm xã hội">
+            </div>
+
+            <div class="form-group">
+                <label for="bhyt">5.1. Mã số BHYT</label>
+                <input type="text" id="bhyt" name="bhyt" placeholder="Nhập mã số bảo hiểm y tế">
+            </div>
+
+            <div class="form-group">
+                <label for="address" class="required">6. Nơi đăng ký thường trú</label>
+                <input type="text" id="address" name="address" required placeholder="Nhập địa chỉ thường trú">
+            </div>
+
+            <div class="form-group">
+                <label for="currentAddress">7. Nơi ở hiện tại (Nếu khác nơi đăng ký thường trú)</label>
+                <input type="text" id="currentAddress" name="currentAddress" placeholder="Nhập địa chỉ hiện tại">
+            </div>
+
+            <div class="form-group">
+                <label>8. Đối tượng ưu tiên (nếu có)</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="priority_disabled" name="priority" value="Người khuyết tật">
+                        <label for="priority_disabled">Người khuyết tật</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="priority_poor" name="priority" value="Thuộc hộ nghèo">
+                        <label for="priority_poor">Thuộc hộ nghèo</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="priority_near_poor" name="priority" value="Thuộc hộ cận nghèo">
+                        <label for="priority_near_poor">Thuộc hộ cận nghèo</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="priority_land" name="priority" value="Thuộc hộ bị thu hồi đất">
+                        <label for="priority_land">Thuộc hộ bị thu hồi đất</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="priority_warhero" name="priority" value="Thân nhân của người có công với cách mạng">
+                        <label for="priority_warhero">Thân nhân của người có công với cách mạng</label>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="ethnicity">Dân tộc thiểu số (ghi tên dân tộc)</label>
+                    <input type="text" id="ethnicity" name="ethnicity" placeholder="Ví dụ: Kinh, Tày, Mông...">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>9. Trình độ giáo dục phổ thông cao nhất đã tốt nghiệp</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="edu_notfinish" name="education" value="Chưa học xong Tiểu học">
+                        <label for="edu_notfinish">Chưa học xong Tiểu học</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="edu_primary" name="education" value="Tốt nghiệp Tiểu học">
+                        <label for="edu_primary">Tốt nghiệp Tiểu học</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="edu_middle" name="education" value="Tốt nghiệp THCS">
+                        <label for="edu_middle">Tốt nghiệp THCS</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="edu_high" name="education" value="Tốt nghiệp THPT">
+                        <label for="edu_high">Tốt nghiệp THPT</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>10. Trình độ chuyên môn kỹ thuật cao nhất đạt được</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="spec_none" name="specialization" value="Chưa qua đào tạo">
+                        <label for="spec_none">Chưa qua đào tạo</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="spec_cnkt" name="specialization" value="CNKT không có bằng">
+                        <label for="spec_cnkt">CNKT không có bằng</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="spec_short" name="specialization" value="Chứng chỉ nghề dưới 3 tháng">
+                        <label for="spec_short">Chứng chỉ nghề dưới 3 tháng</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="spec_sophoc" name="specialization" value="Sơ cấp">
+                        <label for="spec_sophoc">Sơ cấp</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="spec_trungcap" name="specialization" value="Trung cấp">
+                        <label for="spec_trungcap">Trung cấp</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="spec_cao_dang" name="specialization" value="Cao đẳng">
+                        <label for="spec_cao_dang">Cao đẳng</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="spec_dh" name="specialization" value="Đại học">
+                        <label for="spec_dh">Đại học</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="spec_tren_dh" name="specialization" value="Trên đại học">
+                        <label for="spec_tren_dh">Trên đại học</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="major">10.1. Chuyên ngành đào tạo</label>
+                <input type="text" id="major" name="major" placeholder="Ví dụ: Công nghệ thông tin, Kế toán...">
+            </div>
+
+            <div class="form-group">
+                <label class="required">11. Tình trạng tham gia hoạt động kinh tế</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="employed" name="employmentStatus" value="Người có việc làm" required>
+                        <label for="employed">Người có việc làm → Chuyển câu 12</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="unemployed" name="employmentStatus" value="Người thất nghiệp" required>
+                        <label for="unemployed">Người thất nghiệp → Chuyển câu 13</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="inactive" name="employmentStatus" value="Không tham gia hoạt động kinh tế" required>
+                        <label for="inactive">Không tham gia hoạt động kinh tế</label>
+                    </div>
+                </div>
+                <div id="inactiveReason" class="sub-group" style="display:none;">
+                    <label>Lý do</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="studying" name="inactiveReason" value="Đi học">
+                            <label for="studying">Đi học</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="retired" name="inactiveReason" value="Hưu trí">
+                            <label for="retired">Hưu trí</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="homemaker" name="inactiveReason" value="Nội trợ">
+                            <label for="homemaker">Nội trợ</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="inactive_disabled" name="inactiveReason" value="Khuyết tật">
+                            <label for="inactive_disabled">Khuyết tật</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="otherReason" name="inactiveReason" value="Khác">
+                            <label for="otherReason">Khác</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="employedSection" class="form-section" style="display:none;">
+                <div class="section-title">12. Thông tin người có việc làm</div>
+                
+                <div class="form-group">
+                    <label>Loại hình việc làm</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="employment_business" name="employmentType" value="Chủ cơ sở SXKD">
+                            <label for="employment_business">Chủ cơ sở SXKD</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="selfEmployed" name="employmentType" value="Tự làm">
+                            <label for="selfEmployed">Tự làm</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="familyWorker" name="employmentType" value="Lao động gia đình">
+                            <label for="familyWorker">Lao động gia đình</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>12.1. Vị thế việc làm</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="cooperative" name="jobStatus" value="Xã viên HTX">
+                            <label for="cooperative">Xã viên HTX</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="employee" name="jobStatus" value="Làm công ăn lương">
+                            <label for="employee">Làm công ăn lương</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="currentJob">12.2 Công việc cụ thể đang làm</label>
+                    <input type="text" id="currentJob" name="currentJob" placeholder="Ví dụ: Nhân viên kỹ thuật, Kế toán...">
+                </div>
+
+                <div class="form-group">
+                    <label>a. Tham gia BHXH</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="insuranceYes" name="insurance" value="Có">
+                            <label for="insuranceYes">Có</label>
+                        </div>
+                        <div id="insuranceTypeGroup" class="sub-group" style="display:none;">
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="mandatory" name="insuranceType" value="Bắt buộc">
+                                    <label for="mandatory">Bắt buộc</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="voluntary" name="insuranceType" value="Tự nguyện">
+                                    <label for="voluntary">Tự nguyện</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="insuranceNo" name="insurance" value="Không">
+                            <label for="insuranceNo">Không</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>b. Hợp đồng lao động (HĐLĐ)</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="contractYes" name="contract" value="Có">
+                            <label for="contractYes">Có</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="contractNo" name="contract" value="Không">
+                            <label for="contractNo">Không</label>
+                        </div>
+                    </div>
+                    <div id="contractDetails" class="sub-group" style="display:none;">
+                        <label>Loại hợp đồng lao động</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="fixedTerm" name="contractType" value="HĐLĐ xác định thời hạn">
+                                <label for="fixedTerm">HĐLĐ xác định thời hạn</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="indefiniteTerm" name="contractType" value="HĐLĐ không xác định thời hạn">
+                                <label for="indefiniteTerm">HĐLĐ không xác định thời hạn</label>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 15px;">
+                            <label for="contractDate">Thời gian bắt đầu thực hiện HĐLĐ</label>
+                            <input type="date" id="contractDate" name="contractDate">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>12.3. Nơi làm việc</label>
+                    <div class="form-group">
+                        <label>a. Loại hình nơi làm việc</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="agriculture" name="workplace" value="Hộ nông, lâm nghiệp, thủy sản">
+                                <label for="agriculture">Hộ nông, lâm nghiệp, thủy sản</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="freelance" name="workplace" value="Cá nhân làm tự do">
+                                <label for="freelance">Cá nhân làm tự do</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="workplace_business" name="workplace" value="Cơ sở kinh doanh cá thể">
+                                <label for="workplace_business">Cơ sở kinh doanh cá thể</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="workplace_cooperative" name="workplace" value="Hợp tác xã">
+                                <label for="workplace_cooperative">Hợp tác xã</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="enterprise" name="workplace" value="Doanh nghiệp">
+                                <label for="enterprise">Doanh nghiệp</label>
+                            </div>
+                            <div id="enterpriseTypeGroup" class="sub-group" style="display:none;">
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="stateEnterprise" name="enterpriseType" value="DN Nhà nước">
+                                        <label for="stateEnterprise">DN Nhà nước</label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="privateEnterprise" name="enterpriseType" value="DN ngoài Nhà nước">
+                                        <label for="privateEnterprise">DN ngoài Nhà nước / DN FDI</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="publicSector" name="workplace" value="Khu vực nhà nước">
+                                <label for="publicSector">Khu vực nhà nước</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="privateInstitution" name="workplace" value="Đơn vị sự nghiệp ngoài nhà nước">
+                                <label for="privateInstitution">Đơn vị sự nghiệp ngoài nhà nước</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="foreignSector" name="workplace" value="Khu vực nước ngoài">
+                                <label for="foreignSector">Khu vực nước ngoài</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="otherOrg" name="workplace" value="Tổ chức đoàn thể khác">
+                                <label for="otherOrg">Tổ chức đoàn thể khác</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="workplaceAddress">b. Địa chỉ nơi làm việc</label>
+                        <input type="text" id="workplaceAddress" name="workplaceAddress" placeholder="Nhập địa chỉ nơi làm việc">
+                    </div>
+                </div>
+            </div>
+
+            <div id="unemployedSection" class="form-section" style="display:none;">
+                <div class="section-title">13. Thông tin người thất nghiệp</div>
+                
+                <div class="form-group">
+                    <label>Tình trạng</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="neverWorked" name="unemploymentStatus" value="Chưa bao giờ làm việc">
+                            <label for="neverWorked">Chưa bao giờ làm việc</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="workedBefore" name="unemploymentStatus" value="Đã từng làm việc">
+                            <label for="workedBefore">Đã từng làm việc</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>13.1. Thời gian thất nghiệp</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="under3months" name="unemploymentDuration" value="Dưới 3 tháng">
+                            <label for="under3months">Dưới 3 tháng</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="3to12months" name="unemploymentDuration" value="Từ 3 tháng đến 1 năm">
+                            <label for="3to12months">Từ 3 tháng đến 1 năm</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="over1year" name="unemploymentDuration" value="Trên 1 năm">
+                            <label for="over1year">Trên 1 năm</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit">Lưu Thông Tin</button>
+            <div class="success-message" id="successMessage">
+                ✓ Thông tin đã được lưu thành công!
+            </div>
+        </form>
+    </div>
+
+    <script src="static/script.js"></script>
+</body>
+</html>

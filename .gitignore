@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+venv/
+
+# Credentials and secrets
+credentials.json
+.env
+
+# Editor files
+.vscode/
+*.swp
+.DS_Store
