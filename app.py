@@ -15,9 +15,9 @@ app = Flask(__name__)
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
 
-# Đường dẫn file credentials.json (đặt cùng thư mục với app.py)
-credentials = ServiceAccountCredentials.from_json_keyfile_name(
-    'credentials.json', scope)
+# Lấy credentials từ biến môi trường thay vì file
+creds_json = json.loads(os.environ["GCP_CREDENTIALS"])
+credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_json, scope)
 
 # Lấy JSON credentials từ biến môi trường GOOGLE_CREDS
 # creds_json = os.environ.get("GOOGLE_CREDS")
