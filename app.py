@@ -9,22 +9,35 @@ import json
 
 app = Flask(__name__)
 
+# Configure logging
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 # -----------------------------
 # KẾT NỐI GOOGLE SHEETS
 # -----------------------------
 scope = ['https://spreadsheets.google.com/feeds',
          'https://www.googleapis.com/auth/drive']
 
-# Lấy JSON credentials từ biến môi trường GOOGLE_CREDS
-creds_json = os.environ.get("GOOGLE_CREDS")
-
-if creds_json:
-    creds_dict = json.loads(creds_json)
-    credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+# Ưu tiên đọc từ file credentials.json (cho local)
+# Nếu không có file, đọc từ biến môi trường GOOGLE_CREDS (cho Render)
+if os.path.exists('credentials.json'):
+    # Chạy local: đọc từ file
+    credentials = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
+    print('[SUCCESS] Loaded credentials from credentials.json')
 else:
-    raise Exception("⚠️ Environment variable GOOGLE_CREDS is missing!")
+    # Chạy trên cloud (Render): đọc từ biến môi trường
+    creds_json = os.environ.get("GOOGLE_CREDS")
+    if creds_json:
+        creds_dict = json.loads(creds_json)
+        credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+        print('[SUCCESS] Loaded credentials from environment variable')
+    else:
+        raise Exception("Khong tim thay credentials.json va bien moi truong GOOGLE_CREDS!")
 
 client = gspread.authorize(credentials)
+print('[SUCCESS] Google Sheets client authorized')
 
 # ID của Google Sheet
 SPREADSHEET_ID = '14AWEbPdGMZElO-VBzW9N9MTlf0kZxtBNeBIbkxQsxQo'
@@ -34,7 +47,7 @@ HEADERS = [
     'Họ tên', 'Ngày sinh', 'Giới tính', 'Số CCCD', 'Số BHXH', 'Số BHYT',
     'Nơi đăng ký thường trú', 'Nơi ở hiện tại', 'Đối tượng ưu tiên', 'Trình độ phổ thông',
     'Trình độ chuyên môn kỹ thuật', 'Chuyên ngành đào tạo', 'Tình trạng hoạt động kinh tế',
-    'Lý do không tham gia HĐKT', 'Vị trí việc làm', 'Nghề nghiệp cụ thể',
+    'Lý do không tham gia hoạt động kinh tế', 'Vị trí việc làm', 'Nghề nghiệp cụ thể',
     'Tham gia BHXH', 'Loại BHXH', 'Có hợp đồng lao động', 'Loại hợp đồng lao động',
     'Ngày bắt đầu làm việc', 'Nơi làm việc', 'Loại hình DN', 'Địa chỉ nơi làm việc',
     'Tình trạng thất nghiệp', 'Thời gian thất nghiệp'
@@ -44,14 +57,16 @@ HEADERS = [
 # HÀM HỖ TRỢ
 # -----------------------------
 def ensure_headers(sheet):
-    """Đảm bảo rằng dòng đầu tiên của sheet có header."""
+    """Cập nhật header trong Google Sheet."""
     try:
-        first_row = sheet.row_values(1)
-        if not first_row or all(not c.strip() for c in first_row):
-            sheet.insert_row(HEADERS, index=1)
-            app.logger.info('✅ Đã chèn tiêu đề cột vào Google Sheet')
+        # Cập nhật header row 1
+        header_range = sheet.range(1, 1, 1, len(HEADERS))
+        for i, cell in enumerate(header_range):
+            cell.value = HEADERS[i]
+        sheet.update_cells(header_range)
+        print(f'[INFO] Updated {len(HEADERS)} headers in Google Sheet')
     except Exception as e:
-        app.logger.warning(f'⚠️ Không thể kiểm tra header: {e}')
+        print(f'[WARNING] Khong the cap nhat header: {e}')
 
 def safe(data, key):
     return data.get(key, '').strip()
@@ -67,6 +82,12 @@ def home():
 def submit():
     try:
         data = request.get_json()
+        
+        # Log dữ liệu nhận được để debug
+        print('=' * 50)
+        print('[INFO] RECEIVED DATA:')
+        print(json.dumps(data, ensure_ascii=False, indent=2))
+        print('=' * 50)
 
         # Mở Google Sheet
         sheet = client.open_by_key(SPREADSHEET_ID).sheet1
@@ -104,6 +125,9 @@ def submit():
         if safe(data, 'employmentStatus') == 'Không tham gia hoạt động kinh tế':
             inactive_reason = safe(data, 'inactiveReason')
 
+        # Vị trí việc làm (combine employmentType và jobStatus)
+        job_position = safe(data, 'employmentType') or safe(data, 'jobStatus')
+
         # Dòng dữ liệu theo đúng thứ tự
         row = [
             safe(data, 'fullName'),
@@ -120,23 +144,40 @@ def submit():
             safe(data, 'major'),
             safe(data, 'employmentStatus'),
             inactive_reason,
-            safe(data, 'jobStatus'),
-            safe(data, 'currentJob'),
-            safe(data, 'insurance'),
-            insurance_out,
-            safe(data, 'contract'),
-            contract_type,
-            safe(data, 'contractDate'),
-            safe(data, 'workplace'),
-            safe(data, 'enterpriseType'),
-            safe(data, 'workplaceAddress'),
-            safe(data, 'unemploymentStatus'),
-            safe(data, 'unemploymentDuration'),
+            job_position,  # Vị trí việc làm
+            safe(data, 'currentJob'),  # Nghề nghiệp cụ thể
+            insurance,  # Tham gia BHXH
+            insurance_out,  # Loại BHXH
+            contract,  # Có hợp đồng lao động
+            contract_type,  # Loại hợp đồng lao động
+            safe(data, 'contractDate'),  # Ngày bắt đầu làm việc
+            safe(data, 'workplace'),  # Nơi làm việc (cột V)
+            safe(data, 'enterpriseType'),  # Loại hình DN (cột W)
+            safe(data, 'workplaceAddress'),  # Địa chỉ nơi làm việc (cột X)
+            safe(data, 'unemploymentStatus'),  # Tình trạng thất nghiệp (cột Y)
+            safe(data, 'unemploymentDuration')  # Thời gian thất nghiệp (cột Z)
         ]
 
+        print('[INFO] NUMBER OF COLUMNS:', len(row))
+        print('[INFO] ROW DATA:')
+        for i, val in enumerate(row):
+            print(f'  Column {i+1}: {val}')
+        print('=' * 50)
+        
+        print('[INFO] Appending row to sheet...')
         sheet.append_row(row, value_input_option='USER_ENTERED')
-        return jsonify({'success': True})
+        print('[SUCCESS] Data saved successfully!')
+        return jsonify({'success': True, 'message': 'Dữ liệu đã được lưu thành công!'})
 
     except Exception as e:
+        error_msg = str(e)
+        print('=' * 50)
+        print('[ERROR]:', error_msg)
+        print('=' * 50)
         traceback.print_exc()
-        return jsonify({'success': False, 'error': str(e)})
+        return jsonify({'success': False, 'error': error_msg}), 500
+
+
+if __name__ == '__main__':
+    # Chạy app ở chế độ debug khi chạy local
+    app.run(debug=True, host='0.0.0.0', port=5000)
